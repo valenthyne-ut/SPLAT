@@ -1,1 +1,1 @@
-# SPLAT
+# SPLAT: Single-page local authentication template.
