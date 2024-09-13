@@ -1,0 +1,24 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+
+		"baseUrl": "./",
+
+		"rootDir": "./src",
+		"outDir": "./dist",
+
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+
+		"removeComments": true,
+
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+
+		"strict": true,
+		"skipLibCheck": true
+	}
+}

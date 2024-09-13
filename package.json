@@ -1,4 +1,8 @@
 {
-  "name": "splat",
-  "packageManager": "yarn@4.4.1"
+	"name": "splat",
+	"packageManager": "yarn@4.4.1",
+	"workspaces": [
+		"./workspaces/client",
+		"./workspaces/server"
+	]
 }
