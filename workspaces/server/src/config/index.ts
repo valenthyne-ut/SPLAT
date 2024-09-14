@@ -90,6 +90,10 @@ function getServerCredentials(): ServerOptions {
 	}
 }
 
+function getServerHtdocsPath(): string | undefined {
+	return fetchKey("SERVER_HTDOCS_PATH");
+}
+
 // #endregion
 
 /**
@@ -161,5 +165,14 @@ export default {
 	 * 
 	 * **Required (since this is a HTTPS only server).**
 	 */
-	SERVER_CREDENTIALS: getServerCredentials()
+	SERVER_CREDENTIALS: getServerCredentials(),
+	/**
+	 * Path to the server's htdocs. Usually where the SPA is built to. View the middleware/ViewEngine.ts
+	 * file for more information.
+	 * 
+	 * **Default value:** `undefined` (the server automatically looks in the current working directory)
+	 * 
+	 * **Optional.**
+	 */
+	SERVER_HTDOCS_PATH: getServerHtdocsPath()
 };

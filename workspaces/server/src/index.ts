@@ -8,6 +8,7 @@ import chalk from "chalk";
 import { listNetworkInterfaceAddresses } from "./util/Networking.js";
 import helmet from "helmet";
 import { useCORS } from "./middleware/CORS.js";
+import { useViewEngine } from "./middleware/ViewEngine.js";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 void (async () => {
@@ -17,6 +18,9 @@ void (async () => {
 		// Global middleware
 		app.use(helmet());
 		useCORS(app, config.SERVER_PORT, config.SERVER_ADDRESS, config.ENVIRONMENT);
+
+		// View engine
+		useViewEngine(app, config.SERVER_HTDOCS_PATH);
 
 		const serverOptions = config.SERVER_CREDENTIALS;
 		// Modify any other server options you need to below here.
