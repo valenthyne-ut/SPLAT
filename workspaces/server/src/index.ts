@@ -5,6 +5,7 @@ import config from "./config/index.js";
 import { unrollError } from "./util/Errors.js";
 import express from "express";
 import chalk from "chalk";
+import { listNetworkInterfaceAddresses } from "./util/Networking.js";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 void (async () => {
@@ -18,6 +19,10 @@ void (async () => {
 		httpsServer.on("listening", () => {
 			logger.log("info", "Server started successfully.");
 			logger.log("info", `Local: ${chalk.cyan(`https://localhost:${config.SERVER_PORT}`)}`);
+
+			for(const address of listNetworkInterfaceAddresses()) {
+				logger.log("info", `Network: ${chalk.cyan(`https://${address}:${config.SERVER_PORT}`)}`);
+			}
 		});
 	} catch(error) {
 		logger.log("fatal", "Server failed to start.");
