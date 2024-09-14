@@ -38,6 +38,17 @@ function getLogfilePath(): string {
 
 // #region Server variables
 
+function getServerPort(): number {
+	let port = 8443;
+	const userPort = fetchKey("PORT");
+	if(userPort) {
+		const parsedPort = parseInt(userPort);
+		if(parsedPort) { port = parsedPort; }
+		else { logger.log("warning", "Couldn't parse user-defined port. Defaulting to 8443."); }
+	}
+	return port;
+}
+
 function getServerCredentials(): ServerOptions {
 	const credentials: ServerOptions = {};
 
@@ -104,6 +115,12 @@ export default {
 	 * **Default value:** `(cwd)/splat.log`
 	 */
 	LOGFILE_PATH: getLogfilePath(),
+	/**
+	 * The port to which the server will bind to.
+	 * 
+	 * **Default value:** `8443`
+	 */
+	SERVER_PORT: getServerPort(),
 	/**
 	 * The `key.pem` and `cert.pem` files put into the `credentials` directory within
 	 * the server's working directory.
