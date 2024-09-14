@@ -38,6 +38,15 @@ function getLogfilePath(): string {
 
 // #region Server variables
 
+function getServerAddress(): string {
+	return fetchKey("SERVER_ADDRESS") || "localhost";
+}
+
+function getAlwaysDisplayServerAddress(): boolean {
+	const value = fetchKey("ALWAYS_DISPLAY_SERVER_ADDRESS");
+	return (value !== undefined && value.toLowerCase() === "true");
+}
+
 function getServerPort(): number {
 	let port = 8443;
 	const userPort = fetchKey("PORT");
@@ -115,6 +124,18 @@ export default {
 	 * **Default value:** `(cwd)/splat.log`
 	 */
 	LOGFILE_PATH: getLogfilePath(),
+	/**
+	 * The public server address for CORS to bind to. Usually a domain name you own.
+	 * 
+	 * **Default value:** `localhost`
+	 */
+	SERVER_ADDRESS: getServerAddress(),
+	/** 
+	 * Whether to always display the public server address or not, regardless of environment.
+	 * 
+	 * **Default value:** `false`
+	 */
+	ALWAYS_DISPLAY_SERVER_ADDRESS: getAlwaysDisplayServerAddress(),
 	/**
 	 * The port to which the server will bind to.
 	 * 

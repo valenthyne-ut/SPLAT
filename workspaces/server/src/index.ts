@@ -23,6 +23,11 @@ void (async () => {
 			for(const address of listNetworkInterfaceAddresses()) {
 				logger.log("info", `Network: ${chalk.cyan(`https://${address}:${config.SERVER_PORT}`)}`);
 			}
+
+			if(config.ALWAYS_DISPLAY_SERVER_ADDRESS || 
+				(config.ENVIRONMENT === "production" && config.SERVER_ADDRESS !== "localhost")) {
+				logger.log("info", `Public: ${chalk.cyan(`https://${config.SERVER_ADDRESS}:${config.SERVER_PORT}`)}`);
+			}
 		});
 	} catch(error) {
 		logger.log("fatal", "Server failed to start.");

@@ -28,6 +28,13 @@ export const customFormat = (console: boolean) => {
 		if(console) { 
 			timestamp = chalk.bgBlack(timestamp);
 			formattedLevel = loggerData.colors[level as keyof typeof loggerData.levels](formattedLevel);
+		} else {
+			// Remove any color formats from text if we're logging to the file.
+			// See https://stackoverflow.com/a/29497680
+			message = `${message}`.replace(
+				// eslint-disable-next-line no-control-regex
+				/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, ""
+			);
 		}
 		
 		return `${timestamp} ${formattedLevel} ${message}`;
