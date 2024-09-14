@@ -4,13 +4,14 @@ import { join } from "path";
 import { ServerOptions } from "https";
 import { unrollError } from "@/util/Errors.js";
 import { existsSync, readFileSync } from "fs";
+import { Environment } from "@/types/Environment.js";
 
 function die(reason: string): never {
 	logger.log({ level: "fatal", message: reason });
 	process.exit(1);
 }
 
-const environment = (() => {
+const environment: Environment = (() => {
 	const environment = process.env["ENVIRONMENT"];
 	switch(environment && environment.toLowerCase()) {
 	case "development": { return "development"; }

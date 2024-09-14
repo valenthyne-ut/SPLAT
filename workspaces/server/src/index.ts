@@ -6,11 +6,17 @@ import { unrollError } from "./util/Errors.js";
 import express from "express";
 import chalk from "chalk";
 import { listNetworkInterfaceAddresses } from "./util/Networking.js";
+import helmet from "helmet";
+import { useCORS } from "./middleware/CORS.js";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 void (async () => {
 	try {
 		const app = express();
+
+		// Global middleware
+		app.use(helmet());
+		useCORS(app, config.SERVER_PORT, config.SERVER_ADDRESS, config.ENVIRONMENT);
 
 		const serverOptions = config.SERVER_CREDENTIALS;
 		// Modify any other server options you need to below here.
