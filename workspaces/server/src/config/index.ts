@@ -1,6 +1,9 @@
 import "dotenv/config";
 import { logger, initFileTransport } from "./Logger.js";
 import { join } from "path";
+import { ServerOptions } from "https";
+import { unrollError } from "@/util/Errors.js";
+import { existsSync, readFileSync } from "fs";
 
 function die(reason: string): never {
 	logger.log({ level: "fatal", message: reason });
@@ -32,6 +35,41 @@ function getLogfilePath(): string {
 	initFileTransport(logfilePath);
 	return logfilePath;
 }
+
+// #region Server variables
+
+function getServerCredentials(): ServerOptions {
+	const credentials: ServerOptions = {};
+
+	try {
+		let credentialsPath = join(process.cwd(), "/credentials");
+		
+		const userCredentialsPath = fetchKey("SERVER_CREDENTIALS_PATH");
+		if(userCredentialsPath) {
+			if(existsSync(userCredentialsPath)) {
+				credentialsPath = userCredentialsPath; 
+			} else {
+				logger.log({
+					level: "warning", 
+					message: "User specified credentials path doesn't exist. Defaulting to server working directory path." 
+				});
+			}
+		}
+
+		const keyPath = join(credentialsPath, "/key.pem");
+		const certPath = join(credentialsPath, "/cert.pem");
+
+		credentials.key = readFileSync(keyPath, { encoding: "utf-8" });
+		credentials.cert = readFileSync(certPath, { encoding: "utf-8" });
+
+		return credentials;
+	} catch(error) {
+		logger.log({ level: "fatal", message: "Couldn't read SSL credentials." });
+		die(unrollError(error, true));
+	}
+}
+
+// #endregion
 
 /**
  * All environment variables, put through "translator" functions. 
@@ -65,5 +103,24 @@ export default {
 	 *
 	 * **Default value:** `(cwd)/splat.log`
 	 */
-	LOGFILE_PATH: getLogfilePath()
+	LOGFILE_PATH: getLogfilePath(),
+	/**
+	 * The `key.pem` and `cert.pem` files put into the `credentials` directory within
+	 * the server's working directory.
+	 * 
+	 * If you'd like to define a path to a credentials directory yourself, use the 
+	 * `SERVER_CREDENTIALS_PATH` .env variable.
+	 * 
+	 * If you'd like to generate a self-signed SSL certificate through OpenSSL, use 
+	 * this command whilst in the directory you'd like the certificate to be in:
+	 * 
+	 * `openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -nodes -subj "/C=XX/ST=StateName/L=CityName/O=CompanyName/OU=CompanySectionName/CN=CommonNameOrHostname"`
+	 * 
+	 * Taken from the following SO answer (thank you Diego Woitasen and StackzOfZtuff):
+	 * 
+	 * https://stackoverflow.com/questions/10175812/how-to-generate-a-self-signed-ssl-certificate-using-openssl#answer-10176685
+	 * 
+	 * **Required (since this is a HTTPS only server).**
+	 */
+	SERVER_CREDENTIALS: getServerCredentials()
 };
