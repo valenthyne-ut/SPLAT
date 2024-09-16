@@ -6,6 +6,7 @@ import { unrollError } from "@/util/Errors.js";
 import { existsSync, readFileSync } from "fs";
 import { Environment } from "@/types/Environment.js";
 import { randomBytes } from "crypto";
+import { benchmarkHashRounds } from "@/util/Cryptography.js";
 
 function die(reason: string): never {
 	logger.log("fatal", reason);
@@ -106,6 +107,24 @@ function getServerCookieSecret(): string[] | string {
 	}
 
 	return randomBytes(64).toString("hex");
+}
+
+function getServerHashRounds(): number {
+	let hashRounds, hashTime = 350;
+
+	const userHashRounds = fetchKey("SERVER_CRYPTOGRAPHY_HASH_ROUNDS");
+	if(userHashRounds) { 
+		const parsedRounds = parseInt(userHashRounds);
+		if(parsedRounds) { hashRounds = parsedRounds; }
+	} else {
+		const userAcceptableHashTime = fetchKey("SERVER_CRYPTOGRAPHY_ACCEPTABLE_HASH_TIME");
+		if(userAcceptableHashTime) {
+			const parsedTime = parseInt(userAcceptableHashTime);
+			if(parsedTime) { hashTime = parsedTime; }
+		}
+	}
+
+	return hashRounds || benchmarkHashRounds(hashTime);
 }
 
 // #endregion
@@ -214,5 +233,20 @@ export default {
 	 * 
 	 * **Optional but highly recommended.**
 	 */
-	SERVER_COOKIE_SECRET: getServerCookieSecret()
+	SERVER_COOKIE_SECRET: getServerCookieSecret(),
+	/**
+	 * The hash rounds the server will use in bcrypt for password hashing. The higher, the better; However,
+	 * the higher you set this number, the slower the hashing will be. If you're not sure what to set this
+	 * to, set the `SERVER_CRYPTOGRAPHY_ACCEPTABLE_HASH_TIME` to an amount of time (in milliseconds) you
+	 * think would be reasonable to wait through during the login process. A reasonable amount is somewhere
+	 * between 350 and 500ms, ensuring a reasonable compromise between security and user experience. If you're 
+	 * also not sure about that, the default is 350ms.
+	 * 
+	 * The server will benchmark itself and output a value for this environment variable, pay attention to the
+	 * logs if this is your first time running SPLAT.
+	 * 
+	 * **Optional**, but when the server benchmarks itself and outputs a value, you should put it in your .env
+	 * file, so you don't have to wait for the benchmark everytime the server starts up.
+	 */
+	SERVER_CRYPTOGRAPHY_HASH_ROUNDS: getServerHashRounds()
 };
