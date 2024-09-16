@@ -13,7 +13,6 @@ import cookieParser from "cookie-parser";
 import { initModels } from "./database/models/index.js";
 import { database } from "./database/index.js";
 import { useSession } from "./middleware/Session.js";
-
  
 void (async () => {
 	try {

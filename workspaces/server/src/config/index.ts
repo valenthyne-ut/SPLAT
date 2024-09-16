@@ -95,8 +95,17 @@ function getServerHtdocsPath(): string | undefined {
 	return fetchKey("SERVER_HTDOCS_PATH");
 }
 
-function getServerCookieSecret(): string {
-	return fetchKey("SERVER_COOKIE_SECRET") || randomBytes(32).toString("hex");
+function getServerCookieSecret(): string[] | string {
+	const cookieSecret = fetchKey("SERVER_COOKIE_SECRET");
+	if(cookieSecret) {
+		if(cookieSecret.indexOf(", ") !== -1) {
+			return cookieSecret.split(", ");
+		} else {
+			return cookieSecret;
+		}
+	}
+
+	return randomBytes(64).toString("hex");
 }
 
 // #endregion
@@ -181,7 +190,29 @@ export default {
 	 */
 	SERVER_HTDOCS_PATH: getServerHtdocsPath(),
 	/**
+	 * The server cookie secret. Used for signing cookies. Use a long, unpredictable, randomly generated
+	 * string here. The server will automatically generate one on startup if it isn't specified, but this
+	 * means that across server restarts, sessions won't persist.
 	 * 
+	 * You may also specify multiple cookie secrets (view cookie parser module documentation for more 
+	 * details) by separating them with a comma and space (", "). So for example:
+	 * 
+	 * `bc13DO4NOT534USETHESE470SECRETS1, 1cbfaaa4296578affb4134b061579baa`
+	 * 
+	 * The first secret would be used to both encode and decode cookies, but the second one would only
+	 * be used to decode cookies (incase you change secrets but still need the previous sessions to
+	 * remain active).
+	 * 
+	 * If you'd like to generate a random value yourself, start a Node instance in a terminal window and
+	 * run the following piece of code, then copy the output into your .env file.
+	 * 
+	 * ```js
+	 * console.log((require("crypto")).randomBytes(64).toString("hex"));
+	 * ```
+	 * 
+	 * **Default value:** a randomly generated string.
+	 * 
+	 * **Optional but highly recommended.**
 	 */
 	SERVER_COOKIE_SECRET: getServerCookieSecret()
 };
