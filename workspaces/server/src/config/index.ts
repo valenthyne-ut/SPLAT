@@ -127,6 +127,11 @@ function getServerHashRounds(): number {
 	return hashRounds || benchmarkHashRounds(hashTime);
 }
 
+function getServerDatabaseFilePath(): string {
+	const databaseFilePath = fetchKey("SERVER_DBFILE_PATH") || join(process.cwd(), "database.sqlite");
+	return databaseFilePath;
+}
+
 // #endregion
 
 /**
@@ -248,5 +253,13 @@ export default {
 	 * **Optional**, but when the server benchmarks itself and outputs a value, you should put it in your .env
 	 * file, so you don't have to wait for the benchmark everytime the server starts up.
 	 */
-	SERVER_CRYPTOGRAPHY_HASH_ROUNDS: getServerHashRounds()
+	SERVER_CRYPTOGRAPHY_HASH_ROUNDS: getServerHashRounds(),
+	/**
+	 * The path to the server's local database file.
+	 * 
+	 * **Default value:** `(cwd)/database.sqlite`
+	 * 
+	 * **Optional.**
+	 */
+	SERVER_DBFILE_PATH: getServerDatabaseFilePath()
 };
