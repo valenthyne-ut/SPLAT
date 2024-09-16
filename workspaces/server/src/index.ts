@@ -10,8 +10,10 @@ import helmet from "helmet";
 import { useCORS } from "./middleware/CORS.js";
 import { useViewEngine } from "./middleware/ViewEngine.js";
 import cookieParser from "cookie-parser";
+import { initModels } from "./database/models/index.js";
+import { database } from "./database/index.js";
 
-// eslint-disable-next-line @typescript-eslint/require-await
+ 
 void (async () => {
 	try {
 		const app = express();
@@ -23,6 +25,10 @@ void (async () => {
 		// Parsing middleware
 		app.use(express.json());
 		app.use(cookieParser(config.SERVER_COOKIE_SECRET));
+
+		// Database
+		initModels(database);
+		await database.sync();
 
 		// View engine
 		useViewEngine(app, config.SERVER_HTDOCS_PATH);

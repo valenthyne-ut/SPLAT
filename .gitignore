@@ -23,3 +23,5 @@ credentials
 key.pem
 cert.pem
 *.pem
+datbase.sqlite
+*.sqlite
