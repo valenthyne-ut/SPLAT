@@ -15,6 +15,8 @@ import { database } from "./database/index.js";
 import { useSession } from "./middleware/Session.js";
 import { User } from "./database/models/User.js";
 import { apiRouter } from "./api/index.js";
+import { useStrategies } from "./strategies/index.js";
+import passport from "passport";
  
 void (async () => {
 	try {
@@ -35,6 +37,9 @@ void (async () => {
 		initModels(database);
 		await database.sync();
 		await User.createDefaultAdministrator();
+
+		// Passport strategies
+		useStrategies(passport);
 
 		// API
 		app.use("/api", apiRouter);
