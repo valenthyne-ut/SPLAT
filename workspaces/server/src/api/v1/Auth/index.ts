@@ -1,3 +1,4 @@
+import { RateLimiterFilter } from "@/api/Filters.js";
 import { logger } from "@/config/Logger.js";
 import { notImplemented, serverErrorResponse } from "@/util/API/Responses.js";
 import { unrollError } from "@/util/Errors.js";
@@ -8,7 +9,7 @@ export const authApiRouter = Router()
 	.get("/", (request, response) => {
 		return notImplemented(response);
 	})
-	.get("/axrf-token", (request, response) => { // Also known as CSRF tokens
+	.get("/axrf-token", RateLimiterFilter(), (request, response) => { // Also known as CSRF tokens
 		try {
 			const axrfToken = randomBytes(32).toString("hex");
 			request.session["axrf-token"] = axrfToken;
