@@ -8,7 +8,7 @@ import { Environment } from "@/types/Environment.js";
 import { randomBytes } from "crypto";
 
 function die(reason: string): never {
-	logger.log({ level: "fatal", message: reason });
+	logger.log("fatal", reason);
 	process.exit(1);
 }
 
@@ -71,10 +71,10 @@ function getServerCredentials(): ServerOptions {
 			if(existsSync(userCredentialsPath)) {
 				credentialsPath = userCredentialsPath; 
 			} else {
-				logger.log({
-					level: "warning", 
-					message: "User specified credentials path doesn't exist. Defaulting to server working directory path." 
-				});
+				logger.log(
+					"warning", 
+					"User specified credentials path doesn't exist. Defaulting to server working directory path."
+				);
 			}
 		}
 
@@ -86,7 +86,7 @@ function getServerCredentials(): ServerOptions {
 
 		return credentials;
 	} catch(error) {
-		logger.log({ level: "fatal", message: "Couldn't read SSL credentials." });
+		logger.log("fatal", "Couldn't read SSL credentials." );
 		die(unrollError(error, true));
 	}
 }
