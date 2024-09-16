@@ -14,6 +14,7 @@ import { initModels } from "./database/models/index.js";
 import { database } from "./database/index.js";
 import { useSession } from "./middleware/Session.js";
 import { User } from "./database/models/User.js";
+import { apiRouter } from "./api/index.js";
  
 void (async () => {
 	try {
@@ -34,6 +35,9 @@ void (async () => {
 		initModels(database);
 		await database.sync();
 		await User.createDefaultAdministrator();
+
+		// API
+		app.use("/api", apiRouter);
 
 		// View engine
 		useViewEngine(app, config.SERVER_HTDOCS_PATH);
