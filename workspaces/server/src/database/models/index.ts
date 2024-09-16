@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
+import { User } from "./User.js";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function initModels(database: Sequelize) {
-
+	User.initModel(database);
 }
