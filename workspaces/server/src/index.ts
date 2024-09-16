@@ -9,6 +9,7 @@ import { listNetworkInterfaceAddresses } from "./util/Networking.js";
 import helmet from "helmet";
 import { useCORS } from "./middleware/CORS.js";
 import { useViewEngine } from "./middleware/ViewEngine.js";
+import cookieParser from "cookie-parser";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 void (async () => {
@@ -18,6 +19,10 @@ void (async () => {
 		// Global middleware
 		app.use(helmet());
 		useCORS(app, config.SERVER_PORT, config.SERVER_ADDRESS, config.ENVIRONMENT);
+
+		// Parsing middleware
+		app.use(express.json());
+		app.use(cookieParser(config.SERVER_COOKIE_SECRET));
 
 		// View engine
 		useViewEngine(app, config.SERVER_HTDOCS_PATH);

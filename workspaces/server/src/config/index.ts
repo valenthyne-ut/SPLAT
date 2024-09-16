@@ -5,6 +5,7 @@ import { ServerOptions } from "https";
 import { unrollError } from "@/util/Errors.js";
 import { existsSync, readFileSync } from "fs";
 import { Environment } from "@/types/Environment.js";
+import { randomBytes } from "crypto";
 
 function die(reason: string): never {
 	logger.log({ level: "fatal", message: reason });
@@ -94,6 +95,10 @@ function getServerHtdocsPath(): string | undefined {
 	return fetchKey("SERVER_HTDOCS_PATH");
 }
 
+function getServerCookieSecret(): string {
+	return fetchKey("SERVER_COOKIE_SECRET") || randomBytes(32).toString("hex");
+}
+
 // #endregion
 
 /**
@@ -174,5 +179,9 @@ export default {
 	 * 
 	 * **Optional.**
 	 */
-	SERVER_HTDOCS_PATH: getServerHtdocsPath()
+	SERVER_HTDOCS_PATH: getServerHtdocsPath(),
+	/**
+	 * 
+	 */
+	SERVER_COOKIE_SECRET: getServerCookieSecret()
 };
