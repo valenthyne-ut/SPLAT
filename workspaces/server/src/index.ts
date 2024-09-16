@@ -12,6 +12,7 @@ import { useViewEngine } from "./middleware/ViewEngine.js";
 import cookieParser from "cookie-parser";
 import { initModels } from "./database/models/index.js";
 import { database } from "./database/index.js";
+import { useSession } from "./middleware/Session.js";
 
  
 void (async () => {
@@ -26,6 +27,9 @@ void (async () => {
 		app.use(express.json());
 		app.use(cookieParser(config.SERVER_COOKIE_SECRET));
 
+		// Session middleware
+		useSession(app, config.SERVER_COOKIE_SECRET, database);
+		
 		// Database
 		initModels(database);
 		await database.sync();
