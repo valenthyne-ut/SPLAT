@@ -51,7 +51,11 @@ export const authApiRouter = Router()
 					return serverErrorResponse(response, "Something went wrong while logging you in. Please, try again.");
 				}
 
-				return response.status(200).json({
+				return response.status(200).clearCookie("axrf", {
+					httpOnly: true,
+					sameSite: "strict",
+					secure: true
+				}).json({
 					name: user.name
 				});
 			});
