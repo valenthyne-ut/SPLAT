@@ -1,6 +1,6 @@
 import { AXRFTokenFilter, RateLimiterFilter } from "@/api/Filters.js";
 import { logger } from "@/config/Logger.js";
-import { clientErrorResponse, notImplemented, serverErrorResponse } from "@/util/API/Responses.js";
+import { clientErrorResponse, serverErrorResponse, unauthorized } from "@/util/API/Responses.js";
 import { unrollError } from "@/util/Errors.js";
 import { randomBytes } from "crypto";
 import { RequestHandler, Router } from "express";
@@ -70,6 +70,17 @@ export const authApiRouter = Router()
 			});
 		}) as RequestHandler)(request, response, next);
 	})
-	.delete("/", (request, response) => {
-		return notImplemented(response);
+	.delete("/", AXRFTokenFilter, passport.authenticate("session") as RequestHandler, (request, response) => {
+		if(request.user) {
+			request.session.destroy((logoutError) => {
+				if(logoutError) {
+					logger.log("error", "An error occurred while logging someone out.");
+					logger.log("error", unrollError(logoutError, true));
+					return serverErrorResponse(response, "Something went wrong while logging you out.");
+				}
+				return response.status(200).json({});
+			});
+		} else {
+			return unauthorized(response);
+		}
 	});
