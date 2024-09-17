@@ -1,6 +1,8 @@
 import "@/assets/preflight.scss";
 import "@/assets/main.scss";
 
+import "bootstrap-icons/font/bootstrap-icons.min.css";
+
 import { createApp, type Component } from "vue";
 import { createPinia } from "pinia";
 
