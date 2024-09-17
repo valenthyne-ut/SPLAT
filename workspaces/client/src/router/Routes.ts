@@ -1,3 +1,4 @@
+import LoginView from "@/views/LoginView.vue";
 import RootView from "@/views/RootView.vue";
 import type { Component } from "vue";
 import type { RouteRecordRaw } from "vue-router";
@@ -11,6 +12,16 @@ export const routes: readonly RouteRecordRaw[] = [
 
 		meta: {
 			title: "Home"
+		}
+	},
+	{
+		name: "login",
+		path: "/login",
+
+		component: LoginView as Component,
+
+		meta: {
+			title: "Login"
 		}
 	}
 ];
