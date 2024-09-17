@@ -19,8 +19,17 @@ const LoginRateLimitOptions: Partial<RateLimiterOptions> = {
 };
 
 export const authApiRouter = Router()
-	.get("/", (request, response) => {
-		return notImplemented(response);
+	.get("/", passport.authenticate("session") as RequestHandler, (request, response) => {
+		if(request.user) {
+			return response.status(200).json({
+				authenticated: true,
+				name: request.user.name
+			});
+		} else {
+			return response.status(200).json({
+				authenticated: false
+			});
+		}
 	})
 	.get("/axrf-token", RateLimiterFilter(), (request, response) => { // Also known as CSRF tokens
 		try {
