@@ -16,7 +16,7 @@ export function useSession(app: Express, cookieSecret: string | string[], databa
 			secure: true,
 			httpOnly: true,
 			sameSite: "strict",
-			maxAge: new Date().getTime() + (60 * 10 * 1000) // 10min
+			maxAge: (60 * 10 * 1000) // 10min
 		}
 	}));
 }

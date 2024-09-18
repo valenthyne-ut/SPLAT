@@ -39,7 +39,7 @@ export const authApiRouter = Router()
 				httpOnly: true,
 				sameSite: "strict",
 				secure: true,
-				maxAge: new Date().getTime() + (60 * 10 * 1000)
+				maxAge: (60 * 10 * 1000) // 10min
 			}).json({});
 		} catch(error) {
 			logger.log("error", "An error occurred while generating an AXRF token.");
