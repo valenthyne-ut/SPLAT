@@ -3,8 +3,11 @@
 	import vIcon from "@/components/vIcon.vue";
 	import router from "@/router";
 	import { useAuthStore } from "@/stores/Auth";
+	import { useToastStore } from "@/stores/Toast";
+	import { unrollError } from "@/util/Errors";
 	import { ref } from "vue";
 
+	const toastStore = useToastStore();
 	const authStore = useAuthStore();
 	const authAPI = Instances.AUTH;
 
@@ -18,9 +21,10 @@
 			authStore.setAuthentication(true);
 			authStore.setUsername(response.name);
 			authStore.touchAuthenticationLastChecked();
+			toastStore.pushToast("Successfully logged in.", "success");
 			await router.push("/");
 		} catch(error) {
-			console.log(error);
+			toastStore.pushToast(unrollError(error).message, "error", 5);
 		}
 	}
 </script>
