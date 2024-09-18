@@ -18,6 +18,14 @@ const LoginRateLimitOptions: Partial<RateLimiterOptions> = {
 	skipSuccessfulRequests: true
 };
 
+const AXRFTokenRateLimitOptions: Partial<RateLimiterOptions> = {
+	windowMs: 60 * 5 * 1000, // 5m,
+	limit: 100,
+	standardHeaders: "draft-7",
+	legacyHeaders: false,
+	message: { "error": "Too many requests. Please try again in 5m." }
+};
+
 export const authApiRouter = Router()
 	.get("/", passport.authenticate("session") as RequestHandler, (request, response) => {
 		if(request.user) {
@@ -31,7 +39,7 @@ export const authApiRouter = Router()
 			});
 		}
 	})
-	.get("/axrf-token", RateLimiterFilter(), (request, response) => { // Also known as CSRF tokens
+	.get("/axrf-token", RateLimiterFilter(AXRFTokenRateLimitOptions), (request, response) => { // Also known as CSRF tokens
 		try {
 			const axrfToken = randomBytes(32).toString("hex");
 			request.session["axrf-token"] = axrfToken;
