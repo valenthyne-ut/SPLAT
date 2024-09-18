@@ -11,7 +11,8 @@ export const routes: readonly RouteRecordRaw[] = [
 		component: RootView as Component,
 
 		meta: {
-			title: "Home"
+			title: "Home",
+			requiresAuth: true
 		}
 	},
 	{
@@ -21,7 +22,8 @@ export const routes: readonly RouteRecordRaw[] = [
 		component: LoginView as Component,
 
 		meta: {
-			title: "Login"
+			title: "Login",
+			requiresAuth: false
 		}
 	}
 ];

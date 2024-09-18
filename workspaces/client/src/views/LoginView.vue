@@ -1,5 +1,28 @@
 <script setup lang="ts">
+	import Instances from "@/classes/API/Instances";
 	import vIcon from "@/components/vIcon.vue";
+	import router from "@/router";
+	import { useAuthStore } from "@/stores/Auth";
+	import { ref } from "vue";
+
+	const authStore = useAuthStore();
+	const authAPI = Instances.AUTH;
+
+	const username = ref<string>("");
+	const password = ref<string>("");
+
+	async function attemptLogin() {
+		try {
+			await authAPI.getAXRFToken();
+			const response = await authAPI.authenticate(username.value, password.value);
+			authStore.setAuthentication(true);
+			authStore.setUsername(response.name);
+			authStore.touchAuthenticationLastChecked();
+			await router.push("/");
+		} catch(error) {
+			console.log(error);
+		}
+	}
 </script>
 
 <template>
@@ -11,16 +34,16 @@
 					<vIcon icon-name="person-badge" :fill-variant="true"></vIcon>
 					Username
 				</span>
-				<input type="text" id="username-input">
+				<input v-model="username" type="text" id="username-input">
 			</label>
 			<label for="password-input" class="input-label-holder">
 				<span class="input-label">
 					<vIcon icon-name="key" :fill-variant="true"/>
 					Password
 				</span>
-				<input type="password" id="password-input">
+				<input v-model="password" type="password" id="password-input">
 			</label>
-			<button type="button" class="submit-button">Submit</button>
+			<button @click.passive="attemptLogin" type="button" class="submit-button">Submit</button>
 		</form>
 	</section>
 </template>

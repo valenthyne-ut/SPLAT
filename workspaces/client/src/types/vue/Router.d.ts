@@ -8,5 +8,11 @@ declare module "vue-router" {
 		 * The route's title, displayed to the user on the tab's title.
 		 */
 		title: string;
+		/**
+		 * Whether this route requires the user to be authenticated to be accessed.
+		 * Automatically sends the user to the login page if this is set to true and
+		 * they're not authenticated.
+		 */
+		requiresAuth: boolean;
 	}
 }
