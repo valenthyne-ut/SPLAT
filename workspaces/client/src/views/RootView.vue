@@ -2,7 +2,10 @@
 	import Instances from "@/classes/API/Instances";
 	import router from "@/router";
 	import { useAuthStore } from "@/stores/Auth";
+	import { useToastStore } from "@/stores/Toast";
+	import { unrollError } from "@/util/Errors";
 
+	const toastStore = useToastStore();
 	const authStore = useAuthStore();
 	const authAPI = Instances.AUTH;
 
@@ -13,9 +16,10 @@
 			authStore.setAuthentication(false);
 			authStore.setUsername("");
 			authStore.touchAuthenticationLastChecked();
+			toastStore.pushToast("Successfully logged out.", "success");
 			await router.push("/login");
 		} catch(error) {
-			console.log(error);
+			toastStore.pushToast(unrollError(error).message, "error", 5);
 		}
 	}
 </script>
