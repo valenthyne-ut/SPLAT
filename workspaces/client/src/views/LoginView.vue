@@ -53,6 +53,9 @@
 </template>
 
 <style lang="scss" scoped>
+	@use "sass:map";
+	@use "../assets/variables";
+
 	#login {
 		width: 100%;
 
@@ -63,13 +66,39 @@
 	}
 
 	#login-form {
-		width: 20%;
-
 		display: flex;
 		flex-direction: column;
 		gap: 1em;
 
 		align-items: center;
+
+		// # region Width responsivity
+		width: variables.$COLUMN * 9;
+
+		@media screen and (min-width: map.get(variables.$BREAKPOINTS, "xsm")) {
+			width: variables.$COLUMN * 8;
+		}
+
+		@media screen and (min-width: map.get(variables.$BREAKPOINTS, "sm")) {
+			width: variables.$COLUMN * 7;
+		}
+
+		@media screen and (min-width: map.get(variables.$BREAKPOINTS, "md")) {
+			width: variables.$COLUMN * 6;
+		}
+
+		@media screen and (min-width: map.get(variables.$BREAKPOINTS, "lg")) {
+			width: variables.$COLUMN * 5;
+		}
+
+		@media screen and (min-width: map.get(variables.$BREAKPOINTS, "xl")) {
+			width: variables.$COLUMN * 4;
+		}
+
+		@media screen and (min-width: map.get(variables.$BREAKPOINTS, "2xl")) {
+			width: variables.$COLUMN * 3;
+		}
+		// #endregion
 	}
 
 	h1 {
