@@ -2,6 +2,8 @@ import { createRouter, createWebHistory, type RouteLocationNormalized } from "vu
 import { routes } from "./Routes";
 import { useAuthStore } from "@/stores/Auth";
 import Instances from "@/classes/API/Instances";
+import { useToastStore } from "@/stores/Toast";
+import { unrollError } from "@/util/Errors";
 
 const DEFAULT_TITLE = "SPLAT";
 
@@ -16,6 +18,7 @@ function setTitle(to: RouteLocationNormalized) {
 }
 
 router.beforeEach(async (to) => {
+	const toastStore = useToastStore();
 	const authStore = useAuthStore();
 	const authAPI = Instances.AUTH;
 
@@ -28,7 +31,7 @@ router.beforeEach(async (to) => {
 				authStore.touchAuthenticationLastChecked();
 			}
 		} catch(error) {
-			return;
+			toastStore.pushToast(unrollError(error).message, "error");
 		}
 	}
 
