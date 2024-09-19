@@ -4,5 +4,13 @@
 	"workspaces": [
 		"./workspaces/client",
 		"./workspaces/server"
-	]
+	],
+	"scripts": {
+		"build": "node scripts/build.mjs --server-directory=workspaces/server --client-directory=workspaces/client",
+		"start": "cd dist && node index.js"
+	},
+	"devDependencies": {
+		"@types/node": "^22.5.5",
+		"execa": "^9.4.0"
+	}
 }

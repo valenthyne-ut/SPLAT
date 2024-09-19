@@ -52,7 +52,7 @@ function getAlwaysDisplayServerAddress(): boolean {
 
 function getServerPort(): number {
 	let port = 8443;
-	const userPort = fetchKey("PORT");
+	const userPort = fetchKey("SERVER_PORT");
 	if(userPort) {
 		const parsedPort = parseInt(userPort);
 		if(parsedPort) { port = parsedPort; }
