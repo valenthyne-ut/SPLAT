@@ -1,11 +1,12 @@
 <script setup lang="ts">
 	import vIcon from "@/components/vIcon.vue";
-	import type { InputTypeHTMLAttribute } from "vue";
+	import { computed, type InputTypeHTMLAttribute } from "vue";
 
 	const props = defineProps<{
 		id: string;
 		type: InputTypeHTMLAttribute;
 		labelText: string;
+		disabled: boolean;
 		icon?: {
 			name: string;
 			accessibilityLabel: string;
@@ -13,15 +14,19 @@
 	}>();
 
 	const inputValue = defineModel<string>();
+
+	const computed_inputDisabledClass = computed(() => {
+		return props.disabled ? "disabled" : "";
+	});
 </script>
 
 <template>
-	<label :for="`${id}-input`" class="input-label-holder">
+	<label :for="`${id}-input`" class="input-label-holder" :class="computed_inputDisabledClass">
 		<span class="input-label">
 			<vIcon v-if="icon" :icon-name="icon.name" :fill-variant="true" :accessibility-label="icon.accessibilityLabel" />
 			{{ labelText }}
 		</span>
-		<input :id="`${id}-input`" v-model="inputValue" :type="props.type">
+		<input :id="`${id}-input`" v-model="inputValue" :type="props.type" :disabled="disabled">
 		<slot />
 	</label>
 </template>
@@ -46,6 +51,16 @@
 
 			.input-label {
 				color: #2563eb;
+			}
+		}
+
+		&.disabled {
+			border-color: #52525b;
+
+			cursor: not-allowed;
+
+			input {
+				cursor: not-allowed;
 			}
 		}
 	}

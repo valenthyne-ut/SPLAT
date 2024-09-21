@@ -45,6 +45,7 @@
 				id="username" 
 				type="text" 
 				label-text="Username" 
+				:disabled="loading"
 				:icon="
 					{ 
 						name: 'person-badge', 
@@ -56,6 +57,7 @@
 				id="password"
 				:type="passwordInputType"
 				label-text="Password"
+				:disabled="loading"
 				:icon="
 					{
 						name: 'key',
