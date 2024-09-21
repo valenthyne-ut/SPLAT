@@ -2,6 +2,7 @@
 	import Instances from "@/classes/API/Instances";
 	import InputValueToggle from "@/components/Views/LoginView/InputValueToggle.vue";
 	import LoginInput from "@/components/Views/LoginView/LoginInput.vue";
+	import VSpinner from "@/components/vSpinner.vue";
 	import router from "@/router";
 	import { useAuthStore } from "@/stores/Auth";
 	import { useToastStore } from "@/stores/Toast";
@@ -17,7 +18,10 @@
 
 	const passwordInputType = ref<InputTypeHTMLAttribute>("password");
 
+	const loading = ref<boolean>(false);
+
 	async function attemptLogin() {
+		loading.value = true;
 		try {
 			await authAPI.getAXRFToken();
 			const response = await authAPI.authenticate(username.value, password.value);
@@ -29,6 +33,7 @@
 		} catch(error) {
 			toastStore.pushToast(unrollError(error).message, "error", 5);
 		}
+		loading.value = false;
 	}
 </script>
 
@@ -64,7 +69,8 @@
 					v-model="passwordInputType"
 				/>
 			</LoginInput>
-			<button @click.passive="attemptLogin" type="button" class="submit-button">Submit</button>
+			<button v-if="!loading" @click.passive="attemptLogin" type="button" class="submit-button">Submit</button>
+			<vSpinner v-else/>
 		</form>
 	</section>
 </template>
