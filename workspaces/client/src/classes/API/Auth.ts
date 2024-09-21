@@ -1,4 +1,4 @@
-import type { AuthGETStatusResponse, AuthPOSTLoginResponse } from "@/types/API/Auth/index";
+import type { AuthGETAXRFTokenResponse, AuthGETStatusResponse, AuthPOSTLoginResponse } from "@/types/API/Auth/index";
 import { GenericAPI, HTTPMethods } from ".";
 
 export class AuthAPI extends GenericAPI {
@@ -11,19 +11,24 @@ export class AuthAPI extends GenericAPI {
 	}
 
 	async getAXRFToken() {
-		return await this.call(this.rootPath + "/axrf-token", HTTPMethods.GET) as void;
+		return await this.call(this.rootPath + "/axrf-token", HTTPMethods.GET) as AuthGETAXRFTokenResponse;
 	}
 
-	async authenticate(username: string, password: string) {
+	async authenticate(arxfToken: string, username: string, password: string) {
 		return await this.call(this.rootPath, HTTPMethods.POST, {
 			body: JSON.stringify({
+				"axrf-token": arxfToken,
 				username: username,
 				password: password
 			})
 		}) as AuthPOSTLoginResponse;
 	}
 
-	async deauthenticate() {
-		return await this.call(this.rootPath, HTTPMethods.DELETE) as void;
+	async deauthenticate(axrfToken: string) {
+		return await this.call(this.rootPath, HTTPMethods.DELETE, {
+			body: JSON.stringify({
+				"axrf-token": axrfToken
+			})
+		}) as void;
 	}
 }

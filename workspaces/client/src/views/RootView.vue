@@ -2,20 +2,22 @@
 	import Instances from "@/classes/API/Instances";
 	import router from "@/router";
 	import { useAuthStore } from "@/stores/Auth";
+	import { useAXRFStore } from "@/stores/AXRF";
 	import { useToastStore } from "@/stores/Toast";
 	import { unrollError } from "@/util/Errors";
 
 	const toastStore = useToastStore();
+	const axrfStore = useAXRFStore();
 	const authStore = useAuthStore();
 	const authAPI = Instances.AUTH;
 
 	async function attemptLogout() {
 		try {
-			await authAPI.getAXRFToken();
-			await authAPI.deauthenticate();
+			await authAPI.deauthenticate(axrfStore.token);
 			authStore.setAuthentication(false);
 			authStore.setUsername("");
 			authStore.touchAuthenticationLastChecked();
+			axrfStore.token = "";
 			toastStore.pushToast("Successfully logged out.", "success");
 			await router.push("/login");
 		} catch(error) {

@@ -5,11 +5,13 @@
 	import VSpinner from "@/components/vSpinner.vue";
 	import router from "@/router";
 	import { useAuthStore } from "@/stores/Auth";
+	import { useAXRFStore } from "@/stores/AXRF";
 	import { useToastStore } from "@/stores/Toast";
 	import { unrollError } from "@/util/Errors";
-	import { ref, type InputTypeHTMLAttribute } from "vue";
+	import { onBeforeMount, ref, type InputTypeHTMLAttribute } from "vue";
 
 	const toastStore = useToastStore();
+	const axrfStore = useAXRFStore();
 	const authStore = useAuthStore();
 	const authAPI = Instances.AUTH;
 
@@ -23,11 +25,11 @@
 	async function attemptLogin() {
 		loading.value = true;
 		try {
-			await authAPI.getAXRFToken();
-			const response = await authAPI.authenticate(username.value, password.value);
+			const response = await authAPI.authenticate(axrfStore.token, username.value, password.value);
 			authStore.setAuthentication(true);
 			authStore.setUsername(response.name);
 			authStore.touchAuthenticationLastChecked();
+			axrfStore.token = response.token;
 			toastStore.pushToast("Successfully logged in.", "success");
 			await router.push("/");
 		} catch(error) {
@@ -35,6 +37,13 @@
 		}
 		loading.value = false;
 	}
+
+	onBeforeMount(async () => {
+		if(!axrfStore.token) {
+			const response = await authAPI.getAXRFToken();
+			axrfStore.token = response.token;
+		}
+	});
 </script>
 
 <template>
