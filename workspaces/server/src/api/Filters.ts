@@ -1,5 +1,6 @@
+import { NonIndempotentRequest } from "@/types/API/index.js";
 import { unauthorized } from "@/util/API/Responses.js";
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { rateLimit, Options as RateLimiterOptions } from "express-rate-limit";
 
 export function RateLimiterFilter(options?: Partial<RateLimiterOptions>) {
@@ -13,11 +14,12 @@ export function RateLimiterFilter(options?: Partial<RateLimiterOptions>) {
 	return rateLimit(options || defaultOptions);
 }
 
-export function AXRFTokenFilter(request: Request, response: Response, next: NextFunction) {
+export function AXRFTokenFilter(request: NonIndempotentRequest, response: Response, next: NextFunction) {
 	const sessionToken = request.session["axrf-token"];
-	const cookieToken = request.cookies.axrf as string | undefined;
+	const userToken = request.body["axrf-token"];
 	if(!sessionToken) { return unauthorized(response); }
-	if(sessionToken !== cookieToken) { return unauthorized(response); }
+	if(!userToken) { return unauthorized(response); }
+	if(sessionToken !== userToken) { return unauthorized(response); }
 
 	next();
 }

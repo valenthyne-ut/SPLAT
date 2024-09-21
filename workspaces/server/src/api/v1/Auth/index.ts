@@ -43,12 +43,9 @@ export const authApiRouter = Router()
 		try {
 			const axrfToken = randomBytes(32).toString("hex");
 			request.session["axrf-token"] = axrfToken;
-			return response.status(200).cookie("axrf", axrfToken, {
-				httpOnly: true,
-				sameSite: "strict",
-				secure: true,
-				maxAge: (60 * 10 * 1000) // 10min
-			}).json({});
+			return response.status(200).json({
+				"token": axrfToken
+			});
 		} catch(error) {
 			logger.log("error", "An error occurred while generating an AXRF token.");
 			logger.log("error", unrollError(error, true));
@@ -68,12 +65,12 @@ export const authApiRouter = Router()
 					return serverErrorResponse(response, "Something went wrong while logging you in. Please, try again.");
 				}
 
-				return response.status(200).clearCookie("axrf", {
-					httpOnly: true,
-					sameSite: "strict",
-					secure: true
-				}).json({
-					name: user.name
+				const axrfToken = randomBytes(32).toString("hex");
+				request.session["axrf-token"] = axrfToken;
+
+				return response.status(200).json({
+					name: user.name,
+					token: axrfToken
 				});
 			});
 		}) as RequestHandler)(request, response, next);
