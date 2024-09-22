@@ -31,7 +31,7 @@ void (async () => {
 		app.use(cookieParser(config.SERVER_COOKIE_SECRET));
 
 		// Session middleware
-		useSession(app, config.SERVER_COOKIE_SECRET, database);
+		useSession(app, config.SERVER_COOKIE_SECRET, database, config.MAX_SESSION_TIME * 1000);
 		
 		// Database
 		initModels(database);

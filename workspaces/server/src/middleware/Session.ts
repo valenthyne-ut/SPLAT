@@ -5,7 +5,7 @@ import CSSequelize from "connect-session-sequelize";
 
 const SequelizeStore = CSSequelize(session.Store);
 
-export function useSession(app: Express, cookieSecret: string | string[], database: Sequelize) {
+export function useSession(app: Express, cookieSecret: string | string[], database: Sequelize, maxSessionTime: number) {
 	app.use(session({
 		name: "session",
 		secret: cookieSecret,
@@ -16,7 +16,7 @@ export function useSession(app: Express, cookieSecret: string | string[], databa
 			secure: true,
 			httpOnly: true,
 			sameSite: "strict",
-			maxAge: (60 * 10 * 1000) // 10min
+			maxAge: maxSessionTime
 		}
 	}));
 }
