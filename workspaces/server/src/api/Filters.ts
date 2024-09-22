@@ -1,4 +1,4 @@
-import { NonIndempotentRequest } from "@/types/API/index.js";
+import { NonIndempotentRequest } from "@/types/API/Requests.js";
 import { unauthorized } from "@/util/API/Responses.js";
 import { NextFunction, Response } from "express";
 import { rateLimit, Options as RateLimiterOptions } from "express-rate-limit";

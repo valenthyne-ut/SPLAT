@@ -1,4 +1,4 @@
-import { AuthPOSTRequest } from "@/types/API/Auth/index.js";
+import { AuthPOSTRequest } from "@/types/API/Auth/Requests.js";
 import { isRequestParameterString } from "@/util/API/Requests.js";
 import { clientErrorResponse, invalidRequestParameterResponse } from "@/util/API/Responses.js";
 import { NextFunction, Response } from "express";
