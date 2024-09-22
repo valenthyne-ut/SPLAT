@@ -8,6 +8,7 @@ import { AuthPOSTRequestFilter } from "./Filters.js";
 import passport from "passport";
 import { User } from "@/database/models/User.js";
 import { Options as RateLimiterOptions } from "express-rate-limit";
+import config from "@/config/index.js";
 
 const LoginRateLimitOptions: Partial<RateLimiterOptions> = {
 	windowMs: 60 * 1000, // 1m
@@ -70,7 +71,8 @@ export const authApiRouter = Router()
 
 				return response.status(200).json({
 					name: user.name,
-					token: axrfToken
+					token: axrfToken,
+					expiresAt: Math.floor((Date.now() + (request.session.cookie.maxAge || config.MAX_SESSION_TIME * 1000)) / 1000)
 				});
 			});
 		}) as RequestHandler)(request, response, next);
