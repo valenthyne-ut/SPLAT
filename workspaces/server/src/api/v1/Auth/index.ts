@@ -32,7 +32,8 @@ export const authApiRouter = Router()
 		if(request.user) {
 			return response.status(200).json({
 				authenticated: true,
-				name: request.user.name
+				name: request.user.name,
+				expiresAt: Math.floor((Date.now() + (request.session.cookie.maxAge || config.MAX_SESSION_TIME * 1000)) / 1000)
 			});
 		} else {
 			return response.status(200).json({
