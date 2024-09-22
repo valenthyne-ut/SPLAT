@@ -132,6 +132,16 @@ function getServerDatabaseFilePath(): string {
 	return databaseFilePath;
 }
 
+function getMaxSessionTime(): number {
+	let maxSessionTime = 10 * 60;
+	const userMaxSessionTime = fetchKey("MAX_SESSION_TIME");
+	if(userMaxSessionTime) {
+		const parsedMaxSessionTime = parseInt(userMaxSessionTime);
+		if(parsedMaxSessionTime) { maxSessionTime = parsedMaxSessionTime; }
+	}
+	return maxSessionTime;
+}
+
 // #endregion
 
 /**
@@ -261,5 +271,13 @@ export default {
 	 * 
 	 * **Optional.**
 	 */
-	SERVER_DBFILE_PATH: getServerDatabaseFilePath()
+	SERVER_DBFILE_PATH: getServerDatabaseFilePath(),
+	/**
+	 * The maximum duration for a user session in seconds. It's recommended you keep this a small number.
+	 * 
+	 * **Default value:** `600` seconds (10 minutes)
+	 * 
+	 * **Optional.**
+	 */
+	MAX_SESSION_TIME: getMaxSessionTime()
 };
