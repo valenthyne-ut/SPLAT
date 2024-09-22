@@ -17,7 +17,9 @@
 			authStore.setAuthentication(false);
 			authStore.setUsername("");
 			authStore.touchAuthenticationLastChecked();
+			authStore.setExpiresAt(0);
 			axrfStore.token = "";
+			localStorage.removeItem("axrf-token");
 			toastStore.pushToast("Successfully logged out.", "success");
 			await router.push("/login");
 		} catch(error) {

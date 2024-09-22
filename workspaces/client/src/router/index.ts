@@ -28,6 +28,7 @@ router.beforeEach(async (to) => {
 			if(response.authenticated) {
 				authStore.setAuthentication(true);
 				authStore.setUsername(response.name);
+				authStore.setExpiresAt(response.expiresAt);
 				authStore.touchAuthenticationLastChecked();
 			}
 		} catch(error) {

@@ -28,6 +28,7 @@
 			const response = await authAPI.authenticate(axrfStore.token, username.value, password.value);
 			authStore.setAuthentication(true);
 			authStore.setUsername(response.name);
+			authStore.setExpiresAt(response.expiresAt);
 			authStore.touchAuthenticationLastChecked();
 			axrfStore.token = response.token;
 			toastStore.pushToast("Successfully logged in.", "success");
