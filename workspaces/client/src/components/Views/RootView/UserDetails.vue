@@ -55,6 +55,10 @@
 		align-items: center;
 	}
 
+	.account {
+		margin-bottom: 0.5em;
+	}
+
 	.account span {
 		margin-right: 0.5ch;
 	}

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-	import UserDetails from "@/components/Views/RootView/UserDetails.vue";
+	import NavigationBar from "@/components/Views/RootView/NavigationBar.vue";
 </script>
 
 <template>
-	<UserDetails />
+	<NavigationBar />
 </template>
 
 <style lang="scss" scoped>
