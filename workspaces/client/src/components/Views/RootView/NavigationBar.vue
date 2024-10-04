@@ -78,13 +78,13 @@
 
 		display: flex;
 
+		padding-right: 18px;
+
 		transition: width 150ms;
 
 		&.collapsed {
 			width: calc(2em + 59px);
 		}
-
-		padding-right: 18px;
 
 		@media screen and (min-width: map.get(variables.$BREAKPOINTS, "lg")) {
 			padding-right: 0;
@@ -136,6 +136,8 @@
 		position: relative;
 		left: -9px;
 
+		display: none;
+
 		align-self: center;
 
 		height: 30%;
@@ -150,8 +152,6 @@
 		&:hover {
 			background-color: #f4f4f5;
 		}
-
-		display: none;
 
 		@media screen and (min-width: map.get(variables.$BREAKPOINTS, "lg")) {
 			display: block;
