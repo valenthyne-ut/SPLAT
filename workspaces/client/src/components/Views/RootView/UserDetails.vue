@@ -1,5 +1,6 @@
 <script setup lang="ts">
 	import Instances from "@/classes/API/Instances";
+	import vIcon from "@/components/vIcon.vue";
 	import router from "@/router";
 	import { useAuthStore } from "@/stores/Auth";
 	import { useAXRFStore } from "@/stores/AXRF";
@@ -40,7 +41,8 @@
 			type="button" 
 			class="logout-button"
 		>
-			Log out
+			<vIcon icon-name="door-closed" :fill-variant="true" accessibility-label="Log out"/>
+			<span>Log out</span>
 		</button>
 	</section>
 </template>
@@ -79,5 +81,9 @@
 		&:active {
 			background-color: #dc2626;
 		}
+	}
+
+	.logout-button span {
+		margin-left: 0.5ch;
 	}
 </style>
