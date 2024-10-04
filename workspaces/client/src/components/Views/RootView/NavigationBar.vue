@@ -4,6 +4,7 @@
 	import type { RouteRecordRaw } from "vue-router";
 	import { onBeforeMount } from "vue";
 	import { routes } from "@/router/Routes";
+	import NavigationLink from "./NavigationLink.vue";
 
 	type NavigableRoute = RouteRecordRaw & { meta: { displayInSidebar: true; navbarIcon: string; } };
 	const navigableRoutes: NavigableRoute[] = [];
@@ -29,8 +30,8 @@
 				<span>SPLAT</span>
 			</h1>
 			<ul class="navigation-links">
-				<li v-for="route, index in navigableRoutes" :key="index">
-					<RouterLink :to="route.path">{{ route.meta.title }}</RouterLink>
+				<li v-for="route, index in navigableRoutes" :key="index" class="navigation-link">
+					<NavigationLink :link-to="route.path" :title="route.meta.title" :icon-name="route.meta.navbarIcon"/>
 				</li>
 			</ul>
 			<UserDetails />
@@ -78,9 +79,10 @@
 		margin-left: 0.5ch;
 	}
 
-	.navigation-bar h1 {
-		font-size: x-large;
-		font-weight: bold;
+	.navigation-links {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25em;
 	}
 
 	.user-details {

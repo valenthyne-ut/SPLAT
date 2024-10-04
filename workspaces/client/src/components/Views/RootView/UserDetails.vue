@@ -70,7 +70,6 @@
 
 		border-radius: 4px;
 
-		font-size: large;
 		font-weight: bold;
 
 		color: #ffffff;

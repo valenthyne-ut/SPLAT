@@ -27,7 +27,7 @@ export const routes: readonly RouteRecordRaw[] = [
 					title: "Home",
 					requiresAuth: true,
 					displayInNavbar: true,
-					navbarIcon: "house-fill"
+					navbarIcon: "house"
 				}
 			},
 			{
@@ -40,7 +40,7 @@ export const routes: readonly RouteRecordRaw[] = [
 					title: "Users",
 					requiresAuth: true,
 					displayInNavbar: true,
-					navbarIcon: "person-fill"
+					navbarIcon: "person"
 				}
 			},
 			{
@@ -53,7 +53,7 @@ export const routes: readonly RouteRecordRaw[] = [
 					title: "Settings",
 					requiresAuth: true,
 					displayInNavbar: true,
-					navbarIcon: "gear-fill"
+					navbarIcon: "gear"
 				}
 			}
 		]
