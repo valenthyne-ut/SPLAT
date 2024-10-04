@@ -19,6 +19,14 @@
 		for(const route of rootRouteChildren) {
 			if(route.meta && route.meta.displayInNavbar) { navigableRoutes.push(route as NavigableRoute); }
 		}
+
+		function collapseOnLgWidth() {
+			if(document.body.clientWidth <= 1024) { collapsed.value = true; } 
+		}
+
+		window.addEventListener("resize", collapseOnLgWidth);
+
+		collapseOnLgWidth();
 	});
 
 	const collapsed = ref<boolean>(false);
@@ -74,6 +82,12 @@
 
 		&.collapsed {
 			width: calc(2em + 59px);
+		}
+
+		padding-right: 18px;
+
+		@media screen and (min-width: map.get(variables.$BREAKPOINTS, "lg")) {
+			padding-right: 0;
 		}
 	}
 
@@ -135,6 +149,12 @@
 
 		&:hover {
 			background-color: #f4f4f5;
+		}
+
+		display: none;
+
+		@media screen and (min-width: map.get(variables.$BREAKPOINTS, "lg")) {
+			display: block;
 		}
 	}
 </style>
