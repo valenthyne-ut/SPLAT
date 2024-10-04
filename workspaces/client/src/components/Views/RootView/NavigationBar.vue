@@ -60,6 +60,8 @@
 
 		display: flex;
 		flex-direction: column;
+
+		overflow: auto;
 		
 		padding: 1em;
 
@@ -83,10 +85,12 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.25em;
+		
+		margin-bottom: auto;
 	}
 
 	.user-details {
-		margin-top: auto;
+		margin-top: 1em;
 	}
 
 	.handlebar {

@@ -11,6 +11,7 @@
 
 <style lang="scss" scoped>
 	main {
+		flex-grow: 1;
 		margin: 1em 1em 1em 0;
 	}
 </style>
