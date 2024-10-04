@@ -5,13 +5,14 @@
 		linkTo: string;
 		title: string;
 		iconName: string;
+		collapsed: boolean;
 	}>();
 </script>
 
 <template>
 	<RouterLink :to="linkTo">
 		<vIcon :icon-name="iconName" :fill-variant="true" :accessibility-label="`Navigate to ${title}`"/>
-		<span>{{ title }}</span>
+		<span v-if="!collapsed">{{ title }}</span>
 	</RouterLink>
 </template>
 
@@ -24,6 +25,8 @@
 
 		border-radius: 4px;
 
+		text-wrap: nowrap;
+
 		transition: color 150ms, background-color 150ms;
 
 		&:hover {
@@ -33,6 +36,10 @@
 		&.router-link-exact-active {
 			color: #ffffff;
 			background-color: #2563eb;
+		}
+
+		.collapsed & {
+			text-align: center;
 		}
 	}
 

@@ -2,7 +2,7 @@
 	import vIcon from "@/components/vIcon.vue";
 	import UserDetails from "./UserDetails.vue";
 	import type { RouteRecordRaw } from "vue-router";
-	import { onBeforeMount } from "vue";
+	import { computed, onBeforeMount, ref } from "vue";
 	import { routes } from "@/router/Routes";
 	import NavigationLink from "./NavigationLink.vue";
 
@@ -20,23 +20,39 @@
 			if(route.meta && route.meta.displayInNavbar) { navigableRoutes.push(route as NavigableRoute); }
 		}
 	});
+
+	const collapsed = ref<boolean>(false);
+
+	function toggleCollapsed() {
+		collapsed.value = !collapsed.value;
+	}
+
+	const computed_collapsedClass = computed(() => {
+		return collapsed.value ? "collapsed" : "";
+	});
 </script>
 
 <template>
-	<section class="navigation-bar-holder">
+	<section class="navigation-bar-holder" :class="computed_collapsedClass">
 		<nav class="navigation-bar">
 			<h1>
 				<vIcon icon-name="water" />
-				<span>SPLAT</span>
+				<span v-if="!collapsed">SPLAT</span>
 			</h1>
 			<ul class="navigation-links">
 				<li v-for="route, index in navigableRoutes" :key="index" class="navigation-link">
-					<NavigationLink :link-to="route.path" :title="route.meta.title" :icon-name="route.meta.navbarIcon"/>
+					<NavigationLink
+						:link-to="route.path"
+						:title="route.meta.title"
+						:icon-name="route.meta.navbarIcon"
+						:collapsed="collapsed"
+					/>
 				</li>
 			</ul>
-			<UserDetails />
+			<UserDetails :collapsed="collapsed"/>
 		</nav>
 		<button
+			@click="toggleCollapsed"
 			type="button"
 			class="handlebar"	
 		>
@@ -53,6 +69,12 @@
 		width: variables.$COLUMN * 2;
 
 		display: flex;
+
+		transition: width 150ms;
+
+		&.collapsed {
+			width: calc(2em + 59px);
+		}
 	}
 
 	.navigation-bar {
@@ -71,6 +93,7 @@
 	h1 {
 		margin-bottom: 0.5em;
 
+		text-wrap: nowrap;
 		text-align: center;
 
 		font-size: x-large;
@@ -85,7 +108,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.25em;
-		
+
 		margin-bottom: auto;
 	}
 

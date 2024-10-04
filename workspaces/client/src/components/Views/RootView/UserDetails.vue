@@ -7,6 +7,10 @@
 	import { useToastStore } from "@/stores/Toast";
 	import { unrollError } from "@/util/Errors";
 
+	defineProps<{
+		collapsed: boolean;
+	}>();
+
 	const toastStore = useToastStore();
 
 	const authStore = useAuthStore();
@@ -33,7 +37,7 @@
 <template>
 	<section class="user-details">
 		<span class="account">
-			<span>Logged in as</span>
+			<span v-if="!collapsed">Logged in as</span>
 			<strong>{{ authStore.username }}</strong>
 		</span>
 		<button 
@@ -42,7 +46,7 @@
 			class="logout-button"
 		>
 			<vIcon icon-name="door-closed" :fill-variant="true" accessibility-label="Log out"/>
-			<span>Log out</span>
+			<span v-if="!collapsed">Log out</span>
 		</button>
 	</section>
 </template>
@@ -53,6 +57,8 @@
 		flex-direction: column;
 
 		align-items: center;
+
+		text-wrap: nowrap;
 	}
 
 	.account {
