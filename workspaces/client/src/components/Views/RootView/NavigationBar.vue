@@ -1,7 +1,24 @@
 <script setup lang="ts">
 	import vIcon from "@/components/vIcon.vue";
 	import UserDetails from "./UserDetails.vue";
+	import type { RouteRecordRaw } from "vue-router";
+	import { onBeforeMount } from "vue";
+	import { routes } from "@/router/Routes";
 
+	type NavigableRoute = RouteRecordRaw & { meta: { displayInSidebar: true; navbarIcon: string; } };
+	const navigableRoutes: NavigableRoute[] = [];
+
+	onBeforeMount(() => {
+		const rootRoute = routes.find(route => route.path === "/");
+		if(!rootRoute) { throw new Error("No root route defined!"); }
+
+		const rootRouteChildren = rootRoute.children;
+		if(!rootRouteChildren) { throw new Error("No root route children defined!"); } 
+
+		for(const route of rootRouteChildren) {
+			if(route.meta && route.meta.displayInNavbar) { navigableRoutes.push(route as NavigableRoute); }
+		}
+	});
 </script>
 
 <template>
@@ -12,7 +29,9 @@
 				<span>SPLAT</span>
 			</h1>
 			<ul class="navigation-links">
-
+				<li v-for="route, index in navigableRoutes" :key="index">
+					<RouterLink :to="route.path">{{ route.meta.title }}</RouterLink>
+				</li>
 			</ul>
 			<UserDetails />
 		</nav>

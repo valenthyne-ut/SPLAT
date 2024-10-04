@@ -12,8 +12,51 @@ export const routes: readonly RouteRecordRaw[] = [
 
 		meta: {
 			title: "Home",
-			requiresAuth: true
-		}
+			requiresAuth: true,
+			displayInNavbar: false
+		},
+
+		children: [
+			{
+				name: "home",
+				path: "/",
+
+				component: () => import("@/views/HomeView.vue"),
+
+				meta: {
+					title: "Home",
+					requiresAuth: true,
+					displayInNavbar: true,
+					navbarIcon: "house-fill"
+				}
+			},
+			{
+				name: "users",
+				path: "/users",
+
+				component: () => import("@/views/UsersView.vue"),
+
+				meta: {
+					title: "Users",
+					requiresAuth: true,
+					displayInNavbar: true,
+					navbarIcon: "person-fill"
+				}
+			},
+			{
+				name: "settings",
+				path: "/settings",
+
+				component: () => import("@/views/SettingsView.vue"),
+
+				meta: {
+					title: "Settings",
+					requiresAuth: true,
+					displayInNavbar: true,
+					navbarIcon: "gear-fill"
+				}
+			}
+		]
 	},
 	{
 		name: "login",
@@ -23,7 +66,8 @@ export const routes: readonly RouteRecordRaw[] = [
 
 		meta: {
 			title: "Login",
-			requiresAuth: false
+			requiresAuth: false,
+			displayInNavbar: false
 		}
 	}
 ];

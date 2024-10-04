@@ -4,7 +4,13 @@
 
 <template>
 	<NavigationBar />
+	<main>
+		<RouterView />
+	</main>
 </template>
 
 <style lang="scss" scoped>
+	main {
+		margin: 1em 1em 1em 0;
+	}
 </style>

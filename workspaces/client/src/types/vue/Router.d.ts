@@ -14,5 +14,13 @@ declare module "vue-router" {
 		 * they're not authenticated.
 		 */
 		requiresAuth: boolean;
+		/**
+		 * Whether this route should be listed in the navigation sidebar.
+		 */
+		displayInNavbar: boolean;
+		/**
+		 * The icon to display in the navigation sidebra.
+		 */
+		navbarIcon?: string;
 	}
 }
